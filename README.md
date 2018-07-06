@@ -17,7 +17,7 @@
   - Run command "ionic cordova build ios"
 
 
-##. 2. What did we change for Ionic usage?
+## 2. What did we change for Ionic usage?
 
   ### Changes to library
   
