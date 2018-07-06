@@ -11,33 +11,31 @@
 
 - Run command "ionic cordova build ios"
 
-Changes to MSAL 
-
 2. What did we change for Ionic usage?
-1) Changes to library
+- Changes to library
   !! Note that we modified only 1 file in the library which is located at msal/lib-commonjs/UserAgentApplication.js. Following modifications are all applied to this file.
 
-- Changes to loginRedirect() function
-  Add a parameter for a callback to handle token response
-    original: UserAgentApplication.prototype.loginRedirect = function (scopes, extraQueryParameters)
-    modified: UserAgentApplication.prototype.loginRedirect = function (scopes, extraQueryParameters, callback)
+  'Changes to loginRedirect() function
+    Add a parameter for a callback to handle token response
+      original: UserAgentApplication.prototype.loginRedirect = function (scopes, extraQueryParameters)
+      modified: UserAgentApplication.prototype.loginRedirect = function (scopes, extraQueryParameters, callback)
     
-  Change promptUser() function call at the end of the function as following
-    original: _this.promptUser(urlNavigate);
-    modified: _this.promptUser(urlNavigate, callback);
+    Change promptUser() function call at the end of the function as following
+      original: _this.promptUser(urlNavigate);
+      modified: _this.promptUser(urlNavigate, callback);
     
-- Changes to promptUser() function
-  Add a parameter for a callback to handle token response
-      original: UserAgentApplication.prototype.promptUser = function (urlNavigate)
-      modified: UserAgentApplication.prototype.promptUser = function (urlNavigate, callback)
+  'Changes to promptUser() function
+    Add a parameter for a callback to handle token response
+        original: UserAgentApplication.prototype.promptUser = function (urlNavigate)
+        modified: UserAgentApplication.prototype.promptUser = function (urlNavigate, callback)
       
-  Instead of replacing window location, we open an in-app-browser page and pass that browserRef as a parameter of callback function call
-    original: window.location.replace(urlNavigate);
-    modified: var browserRef = window.open(urlNavigate, "_blank");
-              callback(browserRef);
+    Instead of replacing window location, we open an in-app-browser and pass that browserRef as a parameter of callback function call
+      original: window.location.replace(urlNavigate);
+      modified: var browserRef = window.open(urlNavigate, "_blank");
+                callback(browserRef);
               
-2) Changes to msal.service.ts
-  - In initAuthApp() function, there's a function call for creating UserApplication object.
+- Changes to msal.service.ts
+  'In initAuthApp() function, there's a function call for creating UserApplication object.
       this.clientApplication = new Msal.UserAgentApplication(
         this.tenantConfig.clientID, 
         this.authority,
@@ -47,7 +45,7 @@ Changes to MSAL
     original: {logger: logger, cacheLocation: 'localStorage'}
     modified: {logger: logger, cacheLocation: 'localStorage', redirectUri: 'http://localhost:8080', navigateToLoginRequestUrl: false}
   
-  - In loginRedirect() function, there's a function call of clientApplication.loginRedirect().
+  'In loginRedirect() function, there's a function call of clientApplication.loginRedirect().
     We need to change that function call as following.
     
     original: this.clientApplication.loginRedirect(this.tenantConfig.b2cScopes);
