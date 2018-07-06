@@ -38,16 +38,15 @@ export class MsalService{
         this.clientApplication = new Msal.UserAgentApplication(
             this.tenantConfig.clientID, this.authority,
             function (errorDesc: any, token: any, error: any, tokenType: any) {
-
                 // Called after loginRedirect or acquireTokenPopup
-                // alert('1:' + token);
+                alert('token:' + token);
 
                 // __this.setLoggedInUserData(token);
 
                 // alert('2:' + token);
-            }, { logger: logger, cacheLocation: 'localStorage'}
+            }, { logger: logger, cacheLocation: 'localStorage', redirectUri: 'http://localhost:8080', navigateToLoginRequestUrl: false}
         );
-       this.clientApplication.redirectUri = AppSettings.B2C_AD_RedirectUri;
+       //this.clientApplication.redirectUri = AppSettings.B2C_AD_RedirectUri;
     }
     // public setLoggedInUserData(token:string):void{
 
@@ -63,7 +62,7 @@ export class MsalService{
   }
 
   public login() {
-    return this.tenantConfig.popup ?
+      return this.tenantConfig.popup ?
       this.loginPopup() :
       this.loginRedirect();
   }
@@ -86,10 +85,10 @@ export class MsalService{
     this.clientApplication.logout();
   }
 
-  /*public login(): void {
-    this.initAuthApp();
-    this.clientApplication.loginRedirect(this.tenantConfig.b2cScopes);
-   }*/
+  //public login(): void {
+  //  this.initAuthApp();
+  //  this.clientApplication.loginRedirect(this.tenantConfig.b2cScopes);
+  // }
 
   public loginPopup() {
     return this.clientApplication.loginPopup(this.tenantConfig.b2cScopes).then((idToken) => {
@@ -112,8 +111,28 @@ export class MsalService{
   }
 
   private loginRedirect() {
-    this.clientApplication.loginRedirect(this.tenantConfig.b2cScopes);
-     return this.getToken().then(() => {
+    this.clientApplication.loginRedirect(this.tenantConfig.b2cScopes, '', function(browserRef, storage, param, callback){
+      browserRef.addEventListener("loadstart", (event) => {
+        if ((event.url).indexOf("http://localhost") === 0) {
+          browserRef.removeEventListener("exit", (event) => {});
+          browserRef.close();
+
+          var hash = (event.url).split("#")[1];
+          var responseParameters = hash.split("&");
+          storage.setItem(param, hash);
+
+          window.location.reload();
+
+          console.log(responseParameters);
+        }
+      });
+
+      browserRef.addEventListener("exit", function(event) {
+        console.log("in-app-browser close");
+      });
+    });
+    
+    return this.getToken().then(() => {
       Promise.resolve(this.clientApplication.getUser());
     });
   }
@@ -130,8 +149,4 @@ export class MsalService{
 
     return this.clientApplication.getUser() != null;
   };
-
-
-
-
  }

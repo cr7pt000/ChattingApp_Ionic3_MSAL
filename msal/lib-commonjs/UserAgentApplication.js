@@ -190,7 +190,7 @@ var UserAgentApplication = /** @class */ (function () {
      * @param {Array.<string>} scopes - Permissions you want included in the access token. Not all scopes are guaranteed to be included in the access token returned.
      * @param {string} extraQueryParameters - Key-value pairs to pass to the authentication server during the interactive authentication flow.
      */
-    UserAgentApplication.prototype.loginRedirect = function (scopes, extraQueryParameters) {
+    UserAgentApplication.prototype.loginRedirect = function (scopes, extraQueryParameters, callback) {
         var _this = this;
         /*
         1. Create navigate url
@@ -238,7 +238,7 @@ var UserAgentApplication = /** @class */ (function () {
                 _this._cacheStorage.setItem(authorityKey, _this.authority);
             }
             var urlNavigate = authenticationRequest.createNavigateUrl(scopes) + "&prompt=select_account" + "&response_mode=fragment";
-            _this.promptUser(urlNavigate);
+            _this.promptUser(urlNavigate, callback);
         });
     };
     /*
@@ -275,6 +275,7 @@ var UserAgentApplication = /** @class */ (function () {
             if (!popUpWindow) {
                 return;
             }
+
             _this._loginInProgress = true;
             _this.authorityInstance.ResolveEndpointsAsync().then(function () {
                 var authenticationRequest = new AuthenticationRequestParameters_1.AuthenticationRequestParameters(_this.authorityInstance, _this.clientId, scopes, ResponseTypes.id_token, _this._redirectUri);
@@ -319,15 +320,18 @@ var UserAgentApplication = /** @class */ (function () {
       * @param {string} urlNavigate - URL of the authorization endpoint
       * @hidden
       */
-    UserAgentApplication.prototype.promptUser = function (urlNavigate) {
+    UserAgentApplication.prototype.promptUser = function (urlNavigate, callback) {
         if (urlNavigate && !Utils_1.Utils.isEmpty(urlNavigate)) {
             this._logger.infoPii("Navigate to:" + urlNavigate);
-            window.location.replace(urlNavigate);
+            // window.location.replace(urlNavigate);
+            var browserRef = window.open(urlNavigate, "_blank");
+            callback(browserRef, this._cacheStorage, Constants_1.Constants.urlHash, this.handleAuthenticationResponse);
         }
         else {
             this._logger.info("Navigate url is empty");
         }
     };
+
     /*
      * Used to send the user to the redirect_uri after authentication is complete. The user"s bearer token is attached to the URI fragment as an id_token/access_token field.
      * This function also closes the popup window after redirection.
@@ -767,6 +771,7 @@ var UserAgentApplication = /** @class */ (function () {
         this._acquireTokenInProgress = true;
         var authenticationRequest;
         var acquireTokenAuthority = authority ? AuthorityFactory_1.AuthorityFactory.CreateInstance(authority, this.validateAuthority) : this.authorityInstance;
+        
         acquireTokenAuthority.ResolveEndpointsAsync().then(function () {
             if (Utils_1.Utils.compareObjects(userObject, _this.getUser())) {
                 authenticationRequest = new AuthenticationRequestParameters_1.AuthenticationRequestParameters(acquireTokenAuthority, _this.clientId, scopes, ResponseTypes.token, _this._redirectUri);
@@ -814,6 +819,7 @@ var UserAgentApplication = /** @class */ (function () {
                 reject(Constants_1.ErrorCodes.userLoginError + "|" + Constants_1.ErrorDescription.userLoginError);
                 return;
             }
+
             _this._acquireTokenInProgress = true;
             var authenticationRequest;
             var acquireTokenAuthority = authority ? AuthorityFactory_1.AuthorityFactory.CreateInstance(authority, _this.validateAuthority) : _this.authorityInstance;
@@ -1477,6 +1483,7 @@ var UserAgentApplication = /** @class */ (function () {
         return this._loginInProgress;
     };
     UserAgentApplication.prototype.getHostFromUri = function (uri) {
+        alert('36');
         // remove http:// or https:// from uri
         var extractedUri = String(uri).replace(/^(https?:)\/\//, '');
         extractedUri = extractedUri.split('/')[0];
