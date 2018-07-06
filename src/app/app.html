@@ -1,0 +1,26 @@
+<ion-menu [content]="content" color="dark">
+  <ion-header>
+    <ion-item padding  >
+
+        <img padding  src="../assets/images/logo.png">
+
+         </ion-item>
+  </ion-header>
+
+
+  <ion-content>
+      <ion-list  no-lines >
+          <button id="auth" (click)="login()">Login</button>
+
+        <button menuClose ion-item  (click)="openPage('MyProfilePage')">
+          My Profile
+        </button>
+        <button menuClose ion-item  (click)="openPage('SignOutPage')">
+          Sign Out
+        </button>
+      </ion-list>
+  </ion-content>
+</ion-menu>
+
+<!-- Disable swipe-to-go-back because it's poor UX to combine STGB with side menus -->
+<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>

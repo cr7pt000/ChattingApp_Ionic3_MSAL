@@ -1,0 +1,171 @@
+// Ionic Variables and Theming. For more info, please see:
+// http://ionicframework.com/docs/theming/
+
+// Font path is used to include ionicons,
+// roboto, and noto sans fonts
+$font-path: "../assets/fonts";
+
+
+// The app direction is used to include
+// rtl styles in your app. For more info, please see:
+// http://ionicframework.com/docs/theming/rtl-support/
+$app-direction: ltr;
+
+
+@import "ionic.globals";
+
+
+// Shared Variables
+// --------------------------------------------------
+// To customize the look and feel of this app, you can override
+// the Sass variables found in Ionic's source scss files.
+// To view all the possible Ionic variables, see:
+// http://ionicframework.com/docs/theming/overriding-ionic-variables/
+
+
+// Named Color Variables
+// --------------------------------------------------
+// Named colors makes it easy to reuse colors on various components.
+// It's highly recommended to change the default colors
+// to match your app's branding. Ionic uses a Sass map of
+// colors so you can add, rename and remove colors as needed.
+// The "primary" color is the only required color in the map.
+
+$colors: (
+  primary:    #7AEA00,
+  secondary:  #FFFFFF,
+  secondary1: rgb(235, 243, 226),
+  danger:     #f53d3d,
+  light:      #D0D0D0,
+  dark:       #363636,
+  fromgrad1:  #3f3f3f,
+  tograd1:    #4d4d4d,
+  darkShade1: #4d4d4d,
+);
+$font-size:(
+  x-large: 25px,
+  large:21px, 
+  medium:16px, 
+  small:13px
+
+);
+
+
+$background-color:map-get($colors, dark );
+// .grad {
+//   background-image:-webkit-gradient(linear, center top, center bottom, from(#3f3f3f ), to(#4d4d4d ));
+// }
+
+//}
+
+// body{
+//   background-image: linear-gradient(-90deg,map-get($colors, fromgrad1 ) 0%,map-get($colors, tograd1 ) 100%);
+// }
+@font-face {
+  font-family: Montserrat-Regular;
+  src: url("../assets/fonts/Montserrat-Regular.ttf");
+  }
+ @font-face {
+    font-family: Montserrat-Light;
+    src: url("../assets/fonts/Montserrat-Light.ttf");
+    }
+
+$text-color:map-get($colors, secondary );
+* {
+  font-family: 'Montserrat-Light' ;
+}
+// // too bar
+ $toolbar-background: map-get($colors, secondary );
+ $toolbar-text-color:  map-get($colors, dark );
+
+// $toolbar-md-title-text-color:map-get($colors, dark );
+// $button-md-background-color:map-get($colors, secondary );
+// $button-md-background-activated:map-get($colors, secondary1 );
+
+// $action-sheet-md-button-background:map-get($colors, secondary );
+navbar{
+  background:map-get($colors, secondary );
+  color:  map-get($colors, dark );
+}
+/* buttons*/
+
+.container {
+  align-items:  center
+}
+
+
+
+// // below hr code not working
+ion-menu hr{
+  height: 1px;
+  border-width: 2;  
+ border-color: map-get($colors, light ); 
+}
+
+.textGreen{
+  color:  map-get($colors, primary );
+}
+.textGreenUpper{
+  color:  map-get($colors, primary );
+  text-transform: uppercase;
+}
+.tip{
+ //font-size: 13px;
+ color: map-get($colors, light ); 
+ font-weight: light;
+//  line-height: 16px;
+ padding-left: 16px;
+}
+.greybackground
+{
+  background-color:map-get($colors, darkShade1 ); 
+}
+
+// App iOS Variables
+// --------------------------------------------------
+// iOS only Sass variables can go here
+$button-ios-text-color:map-get($colors, dark );
+$button-ios-font-size: 1.8;
+$button-ios-font-weight: 900;
+
+// App Material Design Variables
+// --------------------------------------------------
+// Material Design only Sass variables can go here
+
+$button-md-text-color:map-get($colors, dark );
+$button-md-font-size: 1.8;
+$button-md-font-weight: 900;
+
+
+// App Windows Variables
+// --------------------------------------------------
+// Windows only Sass variables can go here
+
+$button-wp-text-color:map-get($colors, dark );
+$button-wp-font-size: 1.8;
+$button-wp-font-weight: 900;
+//$button-wp-text-transform:uppercase;
+
+// App Theme
+// --------------------------------------------------
+// Ionic apps can have different themes applied, which can
+// then be future customized. This import comes last
+// so that the above variables are used and Ionic's
+// default are overridden.
+
+@import "ionic.theme.default";
+
+
+// Ionicons
+// --------------------------------------------------
+// The premium icon font for Ionic. For more info, please see:
+// http://ionicframework.com/docs/ionicons/
+
+@import "ionic.ionicons";
+
+
+// Fonts
+// --------------------------------------------------
+
+@import "roboto";
+@import "noto-sans";

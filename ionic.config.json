@@ -1,0 +1,13 @@
+{
+  "name": "msal015-azure-b2c-sample",
+  "app_id": "",
+  "type": "ionic-angular",
+  "integrations": {
+    "cordova": {}
+  },
+  
+"proxies": [{
+  "path": "/api",
+  "proxyUrl": "http://localhost/memwebapi"
+}]
+}
